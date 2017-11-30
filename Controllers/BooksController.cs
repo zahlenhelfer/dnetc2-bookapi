@@ -3,9 +3,10 @@ using System.Collections.Generic;
 
 namespace myBookAPI.Controllers
 {
+    [Route("api/books")]
     public class BooksController : Controller
     {
-        [HttpGet("api/books")]
+        [HttpGet()]
         public JsonResult GetBooks(){
             return new JsonResult(new List<object>(){
                 new { title = "Angular 4 rocks even more",
