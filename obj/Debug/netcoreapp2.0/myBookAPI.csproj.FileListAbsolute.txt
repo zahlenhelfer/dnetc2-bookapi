@@ -1,0 +1,10 @@
+/Users/marcusross/workspace/myBookAPI/obj/Debug/netcoreapp2.0/myBookAPI.csproj.CoreCompileInputs.cache
+/Users/marcusross/workspace/myBookAPI/obj/Debug/netcoreapp2.0/myBookAPI.AssemblyInfoInputs.cache
+/Users/marcusross/workspace/myBookAPI/obj/Debug/netcoreapp2.0/myBookAPI.AssemblyInfo.cs
+/Users/marcusross/workspace/myBookAPI/bin/Debug/netcoreapp2.0/myBookAPI.deps.json
+/Users/marcusross/workspace/myBookAPI/bin/Debug/netcoreapp2.0/myBookAPI.runtimeconfig.json
+/Users/marcusross/workspace/myBookAPI/bin/Debug/netcoreapp2.0/myBookAPI.runtimeconfig.dev.json
+/Users/marcusross/workspace/myBookAPI/bin/Debug/netcoreapp2.0/myBookAPI.dll
+/Users/marcusross/workspace/myBookAPI/bin/Debug/netcoreapp2.0/myBookAPI.pdb
+/Users/marcusross/workspace/myBookAPI/obj/Debug/netcoreapp2.0/myBookAPI.dll
+/Users/marcusross/workspace/myBookAPI/obj/Debug/netcoreapp2.0/myBookAPI.pdb

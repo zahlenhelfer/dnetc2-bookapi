@@ -1,7 +1,11 @@
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+
 namespace myBookAPI.Controllers
 {
     public class BooksController : Controller
     {
+        [HttpGet("api/books")]
         public JsonResult GetBooks(){
             return new JsonResult(new List<object>(){
                 new { title = "Angular 4 rocks even more",
@@ -17,5 +21,6 @@ namespace myBookAPI.Controllers
                       rating = 3.5,
                       coverUrl = "/assets/1.png"}
             });
+        }
     }
 }
