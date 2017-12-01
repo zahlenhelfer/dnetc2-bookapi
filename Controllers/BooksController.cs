@@ -10,13 +10,21 @@ namespace myBookAPI.Controllers
     public class BooksController : Controller
     {
         [HttpGet()]
-        public JsonResult GetBooks(){
-            return new JsonResult(BooksDataStore.Current.Books);
+        public IActionResult GetBooks()
+        {
+            return Ok(BooksDataStore.Current.Books);
         }
 
         [HttpGet("{id}")]
-        public JsonResult GetBook(int id){
-            return new JsonResult(BooksDataStore.Current.Books.FirstOrDefault(c => c.Id == id ));
+        public IActionResult GetBook(int id){
+
+            var bookToReturn = BooksDataStore.Current.Books.FirstOrDefault(c => c.Id == id );
+            
+            if (bookToReturn == null)
+            {
+                return NotFound();
+            }
+            return Ok(bookToReturn);
         }
     }
 }
