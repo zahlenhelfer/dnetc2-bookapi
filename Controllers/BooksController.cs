@@ -50,6 +50,37 @@ namespace myBookAPI.Controllers
             return CreatedAtRoute("GetBookById", new{ id = finalBook.Id},finalBook);
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateBook(int id,
+            [FromBody] BookForUpdateDto book)
+        {
+            
+            if (book == null){
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
+            var bookFromStore = BooksDataStore.Current.Books.FirstOrDefault(c => c.Id == id );
+            
+            if (bookFromStore == null)
+            {
+                return NotFound();
+            }
+
+            bookFromStore.Title = book.Title;
+            bookFromStore.Author = book.Author;
+            bookFromStore.Price = book.Price;
+            bookFromStore.Rating = book.Rating;
+            bookFromStore.Isbn = book.Isbn;
+            bookFromStore.CoverUrl = book.CoverUrl;
+            
+            return NoContent();
+
+        }
+
         [HttpGet("{id}", Name = "GetBookById")]
         public IActionResult GetBook(int id){
 
