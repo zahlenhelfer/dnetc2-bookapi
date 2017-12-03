@@ -113,6 +113,12 @@ namespace myBookAPI.Controllers
                 return BadRequest(ModelState);
             }
             
+            TryValidateModel(bookForUpdateToPatch);
+            
+            if (!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
             bookFromStore.Title = bookForUpdateToPatch.Title;
             bookFromStore.Author = bookForUpdateToPatch.Author;
             bookFromStore.Price = bookForUpdateToPatch.Price;
