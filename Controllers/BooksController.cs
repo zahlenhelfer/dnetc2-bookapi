@@ -5,12 +5,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using myBookAPI.Models;
+using Microsoft.Extensions.Logging;
 
 namespace myBookAPI.Controllers
 {
     [Route("api/books")]
     public class BooksController : Controller
     {
+        private ILogger<BooksController> _logger;
+        public BooksController(ILogger<BooksController> logger)
+        {
+            _logger = logger;
+        }
+
         [HttpGet()]
         public IActionResult GetBooks()
         {
@@ -137,7 +144,7 @@ namespace myBookAPI.Controllers
 
             var bookFromStore = BooksDataStore.Current.Books.FirstOrDefault(
                 c => c.Id == id );
-                
+
             if (bookFromStore == null)
             {
                 return NotFound();
@@ -155,6 +162,7 @@ namespace myBookAPI.Controllers
             
             if (bookToReturn == null)
             {
+                _logger.LogInformation($"Book with id {id} wasn't found.");
                 return NotFound();
             }
             return Ok(bookToReturn);
