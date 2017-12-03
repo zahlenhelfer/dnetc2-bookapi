@@ -25,6 +25,10 @@ namespace myBookAPI.Controllers
                 return BadRequest();
             }
 
+            if (!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+
             var books = BooksDataStore.Current.Books;
 
             // demo purposes - to be improved and needed to be changed
