@@ -130,6 +130,24 @@ namespace myBookAPI.Controllers
 
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteBook(int id){
+            
+            var books = BooksDataStore.Current.Books;
+
+            var bookFromStore = BooksDataStore.Current.Books.FirstOrDefault(
+                c => c.Id == id );
+                
+            if (bookFromStore == null)
+            {
+                return NotFound();
+            }
+
+            books.Remove(bookFromStore);
+
+            return NoContent();
+        }
+
         [HttpGet("{id}", Name = "GetBookById")]
         public IActionResult GetBook(int id){
 
