@@ -81,6 +81,49 @@ namespace myBookAPI.Controllers
 
         }
 
+        [HttpPatch("{id}")]
+        public IActionResult PartialUpdateBook(int id,
+            [FromBody] JsonPatchDocument <BookForUpdateDto> patchDoc)
+        {
+            
+            if (patchDoc == null){
+                return BadRequest();
+            }
+
+            var bookFromStore = BooksDataStore.Current.Books.FirstOrDefault(
+                c => c.Id == id );
+
+            if (bookFromStore == null)
+            {
+                return NotFound();
+            }
+
+            var bookForUpdateToPatch = new BookForUpdateDto()
+            {
+                Title = bookFromStore.Title,
+                Author = bookFromStore.Author,
+                Price = bookFromStore.Price,
+                Rating = bookFromStore.Rating,
+                Isbn = bookFromStore.Isbn,
+                CoverUrl = bookFromStore.CoverUrl
+            };
+            patchDoc.ApplyTo(bookForUpdateToPatch);
+
+            if (!ModelState.IsValid){
+                return BadRequest(ModelState);
+            }
+            
+            bookFromStore.Title = bookForUpdateToPatch.Title;
+            bookFromStore.Author = bookForUpdateToPatch.Author;
+            bookFromStore.Price = bookForUpdateToPatch.Price;
+            bookFromStore.Rating = bookForUpdateToPatch.Rating;
+            bookFromStore.Isbn = bookForUpdateToPatch.Isbn;
+            bookFromStore.CoverUrl = bookForUpdateToPatch.CoverUrl;
+
+            return NoContent();
+
+        }
+
         [HttpGet("{id}", Name = "GetBookById")]
         public IActionResult GetBook(int id){
 
