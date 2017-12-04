@@ -24,5 +24,27 @@ namespace myBookAPI.Services
         {
             return _context.Books.Where(c => c.Id == bookId).FirstOrDefault();
         }
+
+        public void AddBook(Book book)
+        {
+            _context.Add(book);
+        }
+
+        public bool BookExists(int bookId)
+        {
+            return _context.Books.Any(c => c.Id == bookId);
+        }
+
+        public bool Save()
+        {
+            return (_context.SaveChanges() >= 0);
+        }
+
+        public void DeleteBook(Book book)
+        {
+            _context.Remove(book);
+        }
+
+
     }
 }

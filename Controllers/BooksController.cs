@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using myBookAPI.Models;
 using Microsoft.Extensions.Logging;
 using myBookAPI.Services;
+using AutoMapper;
 
 namespace myBookAPI.Controllers
 {
@@ -39,25 +40,16 @@ namespace myBookAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var books = BooksDataStore.Current.Books;
-
-            // demo purposes - to be improved and needed to be changed
-            var maxBookId = BooksDataStore.Current.Books.Max(c => c.Id);
-
-            var finalBook = new BookDto()
+            var finalBook = Mapper.Map<Entities.Book>(book);
+            
+            _bookRepository.AddBook(finalBook);
+            if (!_bookRepository.Save())
             {
-                Id = ++maxBookId,
-                Title = book.Title,
-                Author = book.Author,
-                Isbn = book.Isbn,
-                Price = book.Price,
-                Rating = book.Rating,
-                CoverUrl = book.CoverUrl
-            };
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
 
-            books.Add(finalBook);
-
-            return CreatedAtRoute("GetBookById", new{ id = finalBook.Id},finalBook);
+            var createdBookToReturn = Mapper.Map<Models.BookDto>(finalBook);
+            return CreatedAtRoute("GetBookById", new{ id = finalBook.Id},createdBookToReturn);
         }
 
         [HttpPut("{id}")]
@@ -73,19 +65,29 @@ namespace myBookAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var bookFromStore = BooksDataStore.Current.Books.FirstOrDefault(c => c.Id == id );
-            
-            if (bookFromStore == null)
+            if (!_bookRepository.BookExists(id))
             {
                 return NotFound();
             }
+            
+            var bookToUpdate = _bookRepository.GetBook(id);
+            
+            if (bookToUpdate == null)
+            {
+                return NotFound();
+            }
+            
+            //Mapper.Map(book,bookToUpdate);
+            bookToUpdate.Title = book.Title;
+            bookToUpdate.Author = book.Author;
+            bookToUpdate.Isbn = book.Isbn;
+            bookToUpdate.Price = book.Price;
+            bookToUpdate.Rating = book.Rating;
 
-            bookFromStore.Title = book.Title;
-            bookFromStore.Author = book.Author;
-            bookFromStore.Price = book.Price;
-            bookFromStore.Rating = book.Rating;
-            bookFromStore.Isbn = book.Isbn;
-            bookFromStore.CoverUrl = book.CoverUrl;
+            if (!_bookRepository.Save())
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
             
             return NoContent();
 
@@ -143,17 +145,19 @@ namespace myBookAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteBook(int id){
             
-            var books = BooksDataStore.Current.Books;
-
-            var bookFromStore = BooksDataStore.Current.Books.FirstOrDefault(
-                c => c.Id == id );
-
-            if (bookFromStore == null)
+            var bookToReturn = _bookRepository.GetBook(id);
+            
+            if (bookToReturn == null)
             {
                 return NotFound();
             }
-
-            books.Remove(bookFromStore);
+            
+            _bookRepository.DeleteBook(bookToReturn);
+            
+            if (!_bookRepository.Save())
+            {
+                return StatusCode(500, "A problem happened while handling your request.");
+            }
 
             return NoContent();
         }

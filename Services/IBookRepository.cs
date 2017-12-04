@@ -8,8 +8,11 @@ namespace myBookAPI.Services
 {
     public interface IBookRepository
     {
-        // try the Get
         IEnumerable<Book> GetBooks();
         Book GetBook(int id);
+        bool BookExists(int bookId);
+        void AddBook(Book book);
+        bool Save();
+        void DeleteBook(Book book);
     }
 }

@@ -44,6 +44,15 @@ namespace myBookAPI
             }
 
             app.UseStatusCodePages();
+            
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<Entities.Book, Models.BookDto>();
+                cfg.CreateMap<Models.BookForCreationDto, Entities.Book>();
+                cfg.CreateMap<Models.BookForUpdateDto, Entities.Book>();
+                cfg.CreateMap<Entities.Book, Models.BookForUpdateDto>();
+            });
+            
             app.UseMvc();
             
             app.Run(async (context) =>
