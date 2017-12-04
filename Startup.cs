@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using myBookAPI.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace myBookAPI
 {
@@ -19,6 +21,11 @@ namespace myBookAPI
             services.AddMvc()
                 .AddMvcOptions(o => o.OutputFormatters.Add(
                     new XmlDataContractSerializerOutputFormatter()));
+
+            //var connection = @"Server=(localdb)\mssqllocaldb;Database=mybookdb;Trusted_Connection=True;ConnectRetryCount=0";
+            //services.AddDbContext<BookContext>(options => options.UseSqlServer(connection));
+
+            services.AddDbContext<BookContext>(options => options.UseSqlite("Data Source=mybooksdb.db"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
