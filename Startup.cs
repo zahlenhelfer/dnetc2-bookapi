@@ -25,7 +25,8 @@ namespace myBookAPI
             //var connection = @"Server=(localdb)\mssqllocaldb;Database=mybookdb;Trusted_Connection=True;ConnectRetryCount=0";
             //services.AddDbContext<BookContext>(options => options.UseSqlServer(connection));
 
-            services.AddDbContext<BookContext>(options => options.UseSqlite("Data Source=mybooksdb.db"));
+            var connection = Environment.GetEnvironmentVariable("dbConnection");
+            services.AddDbContext<BookContext>(options => options.UseSqlite(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
