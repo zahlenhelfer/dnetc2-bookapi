@@ -161,7 +161,8 @@ namespace myBookAPI.Controllers
         [HttpGet("{id}", Name = "GetBookById")]
         public IActionResult GetBook(int id){
 
-            var bookToReturn = BooksDataStore.Current.Books.FirstOrDefault(c => c.Id == id );
+            var bookToReturn = _bookRepository.GetBook(id);
+            //BooksDataStore.Current.Books.FirstOrDefault(c => c.Id == id );
             
             if (bookToReturn == null)
             {
