@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using myBookAPI.Entities;
 using Microsoft.EntityFrameworkCore;
+using myBookAPI.Services;
 
 namespace myBookAPI
 {
@@ -27,6 +28,8 @@ namespace myBookAPI
 
             var connection = Environment.GetEnvironmentVariable("dbConnection");
             services.AddDbContext<BookContext>(options => options.UseSqlite(connection));
+
+            services.AddScoped<IBookRepository, BookRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

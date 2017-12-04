@@ -6,22 +6,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using myBookAPI.Models;
 using Microsoft.Extensions.Logging;
+using myBookAPI.Services;
 
 namespace myBookAPI.Controllers
 {
     [Route("api/books")]
     public class BooksController : Controller
     {
-        private ILogger<BooksController> _logger;
-        public BooksController(ILogger<BooksController> logger)
+        private IBookRepository _bookRepository;
+
+        public BooksController(IBookRepository bookRepository)
         {
-            _logger = logger;
+            _bookRepository = bookRepository;
         }
 
         [HttpGet()]
         public IActionResult GetBooks()
         {
-            return Ok(BooksDataStore.Current.Books);
+            var bookEntities = _bookRepository.GetBooks();
+            return Ok(bookEntities);
         }
 
         [HttpPost()]
@@ -162,7 +165,6 @@ namespace myBookAPI.Controllers
             
             if (bookToReturn == null)
             {
-                _logger.LogInformation($"Book with id {id} wasn't found.");
                 return NotFound();
             }
             return Ok(bookToReturn);
