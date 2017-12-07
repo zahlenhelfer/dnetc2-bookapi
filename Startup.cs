@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using myBookAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using myBookAPI.Services;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace myBookAPI
 {
@@ -26,10 +27,15 @@ namespace myBookAPI
             //var connection = @"Server=(localdb)\mssqllocaldb;Database=mybookdb;Trusted_Connection=True;ConnectRetryCount=0";
             //services.AddDbContext<BookContext>(options => options.UseSqlServer(connection));
 
-            var connection = Environment.GetEnvironmentVariable("dbConnection");
-            services.AddDbContext<BookContext>(options => options.UseSqlite(connection));
+            //var connection = Environment.GetEnvironmentVariable("dbConnection");
+            services.AddDbContext<BookContext>(options => options.UseSqlite("Data Source=mydb.db"));
 
             services.AddScoped<IBookRepository, BookRepository>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Books API", Version = "v1"});
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +61,12 @@ namespace myBookAPI
             
             app.UseMvc();
             
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Books API V1");
+            });
+
             app.Run(async (context) =>
             {
                 await context.Response.WriteAsync("Hello World!");
