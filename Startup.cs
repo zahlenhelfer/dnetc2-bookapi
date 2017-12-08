@@ -24,6 +24,8 @@ namespace myBookAPI
                 .AddMvcOptions(o => o.OutputFormatters.Add(
                     new XmlDataContractSerializerOutputFormatter()));
 
+            services.AddCors();
+
             //var connection = @"Server=(localdb)\mssqllocaldb;Database=mybookdb;Trusted_Connection=True;ConnectRetryCount=0";
             //services.AddDbContext<BookContext>(options => options.UseSqlServer(connection));
 
@@ -36,6 +38,7 @@ namespace myBookAPI
             {
                 c.SwaggerDoc("v1", new Info { Title = "Books API", Version = "v1"});
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,8 +62,12 @@ namespace myBookAPI
                 cfg.CreateMap<Entities.Book, Models.BookForUpdateDto>();
             });
             
+            app.UseCors(builder =>
+                builder.WithOrigins("http://example.com")
+                      .AllowAnyHeader()
+            );
+
             app.UseMvc();
-            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
